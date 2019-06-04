@@ -1,4 +1,6 @@
-# ledger-manager
+# ledger-updater
+
+Standalone firmware update / app installation tool.
 
 ```bash
 # install dependencies
