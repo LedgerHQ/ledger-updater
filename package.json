@@ -29,12 +29,12 @@
     "@ledgerhq/errors": "^4.61.0",
     "@ledgerhq/hw-transport": "^4.61.0",
     "@ledgerhq/hw-transport-node-hid-noevents": "^4.61.0",
-    "@ledgerhq/live-common": "^5.12.1",
+    "@ledgerhq/live-common": "^5.12.2",
     "invariant": "^2.2.4",
     "react": "^16.8.6",
     "react-dom": "npm:@hot-loader/react-dom",
     "rxjs": "^6.5.2",
-    "source-map-support": "^0.5.10",
+    "source-map-support": "^0.5.12",
     "styled-jsx": "^3.2.1"
   },
   "devDependencies": {
@@ -42,12 +42,12 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "electron": "4.0.1",
-    "electron-builder": "^20.41.0",
+    "electron-builder": "^20.43.0",
     "electron-webpack": "^2.6.2",
     "eslint": "^5.16.0",
     "eslint-plugin-react": "^7.13.0",
     "prettier": "^1.17.1",
     "react-hot-loader": "^4.9.0",
-    "webpack": "4.28.4"
+    "webpack": "4.33.0"
   }
 }
