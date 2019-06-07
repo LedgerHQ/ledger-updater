@@ -13,7 +13,7 @@
     "prettier": "prettier --write \"src/**/*.js\"",
     "rebuild-deps": "electron-builder install-app-deps",
     "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
+    "compile": "rm -rf dist && electron-webpack",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
