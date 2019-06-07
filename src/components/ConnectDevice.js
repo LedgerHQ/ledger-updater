@@ -45,7 +45,9 @@ export default ({ children }) => {
   return (
     <DeviceContext.Provider value={value}>
       <div className="header">
-        <Button Icon={FaStopCircle} onClick={disconnect}>Disconnect</Button>
+        <Button Icon={FaStopCircle} onClick={disconnect}>
+          Disconnect
+        </Button>
       </div>
       <div className="container">{children}</div>
       <style jsx>

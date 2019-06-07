@@ -6,7 +6,7 @@ export default ({ children, Icon, onClick, ...props }) => {
   const handleClick = async () => {
     if (isLoading) return;
     const r = onClick();
-    if (r.then) {
+    if (r && r.then) {
       setLoading(true);
       try {
         await r;

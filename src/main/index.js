@@ -5,7 +5,7 @@ import { app, BrowserWindow } from "electron";
 import * as path from "path";
 import { format as formatUrl } from "url";
 
-import colors from '../colors'
+import colors from "../colors";
 import setupHIDBridge from "./setup-hid-bridge";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
