@@ -17,6 +17,8 @@ export default () => (
 
       body {
         background: ${colors.base02};
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI",
+          Roboto;
         color: ${colors.base06};
         font-size: 16px;
         line-height: 24px;
