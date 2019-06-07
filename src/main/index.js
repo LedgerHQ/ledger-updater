@@ -5,6 +5,7 @@ import { app, BrowserWindow } from "electron";
 import * as path from "path";
 import { format as formatUrl } from "url";
 
+import colors from '../colors'
 import setupHIDBridge from "./setup-hid-bridge";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -12,7 +13,9 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 let mainWindow;
 
 function createMainWindow() {
-  const window = new BrowserWindow();
+  const window = new BrowserWindow({
+    backgroundColor: colors.base02,
+  });
 
   if (isDevelopment) {
     window.webContents.openDevTools();

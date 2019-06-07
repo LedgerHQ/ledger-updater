@@ -4,8 +4,9 @@ import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 import installApp from "@ledgerhq/live-common/lib/hw/installApp";
 import uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
-import HidProxy from "../HidProxy";
 import GlobalStyle from "./GlobalStyle";
+import ConnectDevice from "./ConnectDevice";
+import DeviceManager from "./DeviceManager";
 
 const App = () => {
   const [deviceInfos, setDeviceInfos] = useState(null);
@@ -58,11 +59,9 @@ const App = () => {
 
   return (
     <>
-      <div>
-        <button onClick={getDeviceInfos}>get device infos</button>
-        {deviceInfos && <button onClick={installVaultApp}>install app</button>}
-      </div>
-      {deviceInfos && <pre>{JSON.stringify(deviceInfos, null, 2)}</pre>}
+      <ConnectDevice>
+        <DeviceManager />
+      </ConnectDevice>
       <GlobalStyle />
     </>
   );

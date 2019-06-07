@@ -33,6 +33,7 @@
     "invariant": "^2.2.4",
     "react": "^16.8.6",
     "react-dom": "npm:@hot-loader/react-dom",
+    "react-icons": "^3.7.0",
     "rxjs": "^6.5.2",
     "source-map-support": "^0.5.12",
     "styled-jsx": "^3.2.1"
