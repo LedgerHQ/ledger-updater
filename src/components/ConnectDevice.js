@@ -11,7 +11,7 @@ import DisplayError from "./DisplayError";
 
 const DeviceContext = createContext(null);
 
-export const useDevice = () => {
+export const useDeviceInfos = () => {
   const deviceContext = useContext(DeviceContext);
   invariant(
     deviceContext,
@@ -20,26 +20,32 @@ export const useDevice = () => {
   return deviceContext;
 };
 
-export default ({ children }) => {
+export default function ConnectDevice({ children }) {
   const [value, setValue] = useState(null);
+  const [transport, setTransport] = useState(null);
   const [error, setError] = useState(null);
 
   const connect = async () => {
     try {
-      const transport = await HidProxy.open();
-      const infos = await getDeviceInfo(transport);
+      const t = await HidProxy.open();
+      const infos = await getDeviceInfo(t);
       // force provider id vault
       Object.assign(infos, { providerId: 5 });
       setError(null);
-      setValue({ transport, infos });
+      setValue(infos);
+      setTransport(t);
+      await t.close();
     } catch (err) {
       setError(remapError(err));
     }
   };
 
   const disconnect = async () => {
-    await value.transport.close();
-    setValue(null);
+    if (transport) {
+      await transport.close();
+      setValue(null);
+      setTransport(null);
+    }
   };
 
   if (!value) {
@@ -88,4 +94,4 @@ export default ({ children }) => {
       </style>
     </DeviceContext.Provider>
   );
-};
+}

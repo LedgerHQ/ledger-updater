@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import installApp from "@ledgerhq/live-common/lib/hw/installApp";
 import uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
-import { useDevice } from "./ConnectDevice";
+import { useDeviceInfos } from "./ConnectDevice";
 import Button from "./Button";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
+import HidProxy from "../HidProxy";
 import remapError from "../logic/remapError";
 
 const appToInstall = {
@@ -24,15 +25,17 @@ const appToUnInstall = {
 };
 
 export default ({ onBack }) => {
-  const { transport, infos } = useDevice();
+  const infos = useDeviceInfos();
   const [msg, setMsg] = useState("uninstalling current app...");
   const [error, setError] = useState(null);
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
+    let sub;
     async function effect() {
+      const transport = await HidProxy.open();
       const handleError = err => setError(remapError(err));
-      uninstallApp(transport, infos.targetId, appToUnInstall).subscribe({
+      sub = uninstallApp(transport, infos.targetId, appToUnInstall).subscribe({
         complete: () => {
           setMsg("installing latest app...");
           installApp(transport, infos.targetId, appToInstall).subscribe({
@@ -49,6 +52,11 @@ export default ({ onBack }) => {
       });
     }
     effect();
+    return () => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
   }, []);
 
   const Back = () => <Button onClick={onBack}>Go back</Button>;

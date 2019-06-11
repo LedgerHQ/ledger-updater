@@ -6,7 +6,7 @@ import InstallFirmware from "./InstallFirmware";
 import Spaced from "./Spaced";
 import colors, { darken } from "../colors";
 
-export default () => {
+export default function DeviceManager() {
   const [action, setAction] = useState(null);
 
   const onBack = () => setAction(null);
@@ -31,7 +31,7 @@ export default () => {
   }
 
   throw new Error("no defined action");
-};
+}
 
 const Actions = ({ onInstallFirmware, onInstallApp }) => (
   <>

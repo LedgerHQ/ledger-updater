@@ -4,7 +4,7 @@ import moment from "moment";
 import firmwareUpdatePrepare from "@ledgerhq/live-common/lib/hw/firmwareUpdate-prepare";
 import firmwareUpdateMain from "@ledgerhq/live-common/lib/hw/firmwareUpdate-main";
 
-import { useDevice } from "./ConnectDevice";
+import { useDeviceInfos } from "./ConnectDevice";
 import Button from "./Button";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
@@ -13,7 +13,7 @@ import remapError from "../logic/remapError";
 let logId = 0;
 
 export default ({ onBack }) => {
-  const { infos } = useDevice();
+  const infos = useDeviceInfos();
   const [logs, dispatch] = useReducer((logs, action) => {
     switch (action.type) {
       case "ADD":
