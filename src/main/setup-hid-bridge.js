@@ -21,7 +21,10 @@ const handleCmd = async (cmd, ...args) => {
       return;
 
     case "close":
-      invariant(transport, "HID was not opened");
+      if (!transport) {
+        console.warn("No transport to close");
+        break;
+      }
       try {
         await transport.close();
       } finally {

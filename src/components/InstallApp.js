@@ -6,6 +6,7 @@ import { useDevice } from "./ConnectDevice";
 import Button from "./Button";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
+import remapError from "../logic/remapError";
 
 const appToInstall = {
   targetId: 0x31010004,
@@ -72,10 +73,3 @@ export default ({ onBack }) => {
 
   return msg;
 };
-
-function remapError(err) {
-  if (err.name === "DeviceOnDashboardExpected") {
-    err.message = "Please allow Ledger Manager on your device";
-  }
-  return err;
-}
