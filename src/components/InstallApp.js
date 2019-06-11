@@ -4,8 +4,8 @@ import uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
 import { useDevice } from "./ConnectDevice";
 import Button from "./Button";
+import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
-import colors from "../colors";
 
 const appToInstall = {
   targetId: 0x31010004,
@@ -30,6 +30,7 @@ export default ({ onBack }) => {
 
   useEffect(() => {
     async function effect() {
+      const handleError = err => setError(remapError(err));
       uninstallApp(transport, infos.targetId, appToUnInstall).subscribe({
         complete: () => {
           setMsg("installing latest app...");
@@ -40,10 +41,10 @@ export default ({ onBack }) => {
               );
             },
             complete: () => setCompleted(true),
-            error: err => setError(err),
+            error: handleError,
           });
         },
-        error: err => setError(err),
+        error: handleError,
       });
     }
     effect();
@@ -63,21 +64,18 @@ export default ({ onBack }) => {
   if (error) {
     return (
       <Spaced of={20}>
-        <div className="error">
-          {error.name && <div>{error.name}</div>}
-          {error.message && <div>{error.message}</div>}
-        </div>
+        <DisplayError error={error} />
         <Back />
-        <style jsx>
-          {`
-            .error {
-              color: ${colors.base08};
-            }
-          `}
-        </style>
       </Spaced>
     );
   }
 
   return msg;
 };
+
+function remapError(err) {
+  if (err.name === "DeviceOnDashboardExpected") {
+    err.message = "Please allow Ledger Manager on your device";
+  }
+  return err;
+}

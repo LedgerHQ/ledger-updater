@@ -3,6 +3,7 @@ import manager from "@ledgerhq/live-common/lib/manager";
 
 import { useDevice } from "./ConnectDevice";
 import Button from "./Button";
+import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
 
 const NO_FIRMWARE_AVAILABLE = "No latest firmware available";
@@ -10,6 +11,7 @@ const NO_FIRMWARE_AVAILABLE = "No latest firmware available";
 export default ({ onBack }) => {
   const { infos } = useDevice();
   const [msg, setMsg] = useState("getting latest firmware...");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const effect = async () => {
@@ -19,22 +21,18 @@ export default ({ onBack }) => {
           setMsg(NO_FIRMWARE_AVAILABLE);
           return;
         }
-        console.log(latestFirmware);
       } catch (err) {
-        console.log(err);
+        setError(err);
       }
     };
     effect();
   }, []);
 
-  if (msg === NO_FIRMWARE_AVAILABLE) {
-    return (
-      <Spaced of={20}>
-        <div>{msg}</div>
-        <Button onClick={onBack}>Go back</Button>
-      </Spaced>
-    );
-  }
-
-  return <div>{msg}</div>;
+  return (
+    <Spaced of={20}>
+      {error && <DisplayError error={error} />}
+      <div>{msg}</div>
+      <Button onClick={onBack}>Go back</Button>
+    </Spaced>
+  );
 };

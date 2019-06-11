@@ -32,6 +32,7 @@ export default ({ children, Icon, onClick, ...props }) => {
           {`
             button {
               position: relative;
+              cursor: pointer;
             }
             .inner {
               display: flex;

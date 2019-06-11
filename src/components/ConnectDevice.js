@@ -6,6 +6,7 @@ import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 import colors from "../colors";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
+import DisplayError from "./DisplayError";
 
 const DeviceContext = createContext(null);
 
@@ -20,11 +21,17 @@ export const useDevice = () => {
 
 export default ({ children }) => {
   const [value, setValue] = useState(null);
+  const [error, setError] = useState(null);
 
   const connect = async () => {
-    const transport = await HidProxy.open();
-    const infos = await getDeviceInfo(transport);
-    setValue({ transport, infos });
+    try {
+      const transport = await HidProxy.open();
+      const infos = await getDeviceInfo(transport);
+      setError(null);
+      setValue({ transport, infos });
+    } catch (err) {
+      setError(err);
+    }
   };
 
   const disconnect = async () => {
@@ -38,6 +45,16 @@ export default ({ children }) => {
         <Button onClick={connect} Icon={FaUsb}>
           Connect device
         </Button>
+        {error && <DisplayError style={{ marginTop: 20 }} error={error} />}
+        <style jsx>
+          {`
+            div {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            }
+          `}
+        </style>
       </div>
     );
   }
@@ -54,7 +71,8 @@ export default ({ children }) => {
         {`
           .container {
             width: 600px;
-            border: 2px solid ${colors.base03};
+            border: 1px solid ${colors.border};
+            background: white;
             border-radius: 4px;
             padding: 20px;
           }

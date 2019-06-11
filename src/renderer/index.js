@@ -2,7 +2,7 @@ import "@babel/polyfill";
 import React from "react";
 import { unstable_createRoot as createRoot } from "react-dom";
 
-import '../live-common-setup';
+import "../live-common-setup";
 import App from "../components/App";
 
 // disable annoying electron dev warning
