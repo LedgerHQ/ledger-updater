@@ -6,7 +6,7 @@ export default function remapError(err) {
     err.message = "Resource unavailable";
   }
   if (err.name === "TransportError") {
-    err.message = "No device found"
+    err.message = "No device found";
   }
   return err;
 }

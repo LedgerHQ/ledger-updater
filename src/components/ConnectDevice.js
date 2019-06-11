@@ -4,7 +4,7 @@ import { FaUsb, FaStopCircle } from "react-icons/fa";
 import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 
 import colors from "../colors";
-import remapError from '../logic/remapError'
+import remapError from "../logic/remapError";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
 import DisplayError from "./DisplayError";
@@ -29,7 +29,7 @@ export default ({ children }) => {
       const transport = await HidProxy.open();
       const infos = await getDeviceInfo(transport);
       // force provider id vault
-      Object.assign(infos, { providerId: 5, });
+      Object.assign(infos, { providerId: 5 });
       setError(null);
       setValue({ transport, infos });
     } catch (err) {
