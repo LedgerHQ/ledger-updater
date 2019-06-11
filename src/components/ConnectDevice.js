@@ -29,6 +29,13 @@ export default function ConnectDevice({ children }) {
     try {
       const t = await HidProxy.open();
       const infos = await getDeviceInfo(t);
+
+      // FIXME * hack * hack * hack *
+      // even in OSU mode, the version should containe -eel
+      if (infos.version === "2.2-d3") {
+        infos.version = "2.2-d3-eel";
+      }
+
       // force provider id vault
       Object.assign(infos, { providerId: 5 });
       setError(null);
@@ -71,6 +78,7 @@ export default function ConnectDevice({ children }) {
   return (
     <DeviceContext.Provider value={value}>
       <div className="header">
+        <div style={{ fontSize: 11 }}>{`firmware v${value.version}`}</div>
         <Button Icon={FaStopCircle} onClick={disconnect}>
           Disconnect
         </Button>
@@ -88,7 +96,8 @@ export default function ConnectDevice({ children }) {
           .header {
             margin-bottom: 20px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
           }
         `}
       </style>

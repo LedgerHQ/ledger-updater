@@ -6,11 +6,11 @@ import { registerTransportModule } from "@ledgerhq/live-common/lib/hw";
 import HidProxy from "./HidProxy";
 
 listenLogs(log => {
-  // console.log(...log);
+  console.log(...log);
 });
 
 setNetwork((...args) => {
-  // console.log(">> network:", args)
+  console.log(">> network:", args)
   return axios(...args);
 });
 
