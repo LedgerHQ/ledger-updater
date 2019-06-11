@@ -15,6 +15,8 @@ let mainWindow;
 function createMainWindow() {
   const window = new BrowserWindow({
     backgroundColor: colors.base02,
+    width: 700,
+    height: 350,
   });
 
   if (isDevelopment) {
