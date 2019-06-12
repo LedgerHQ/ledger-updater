@@ -7,6 +7,7 @@ import { format as formatUrl } from "url";
 
 import colors from "../colors";
 import setupHIDBridge from "./setup-hid-bridge";
+import setupMenu from "./menu";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -46,6 +47,7 @@ function createMainWindow() {
     });
   });
 
+  setupMenu(window);
   setupHIDBridge();
 
   return window;

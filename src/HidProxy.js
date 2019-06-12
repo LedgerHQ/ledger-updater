@@ -6,6 +6,8 @@ import {
 } from "@ledgerhq/errors";
 import Transport from "@ledgerhq/hw-transport";
 
+import { addGlobalLog } from "./renderer/logs";
+
 let uniqID = 0;
 
 const cmd = (...args) =>
@@ -49,8 +51,10 @@ class HIDProxy extends Transport {
   }
 
   async exchange(apdu) {
-    const debug = (...args) => console.log(...args)
-    // const { debug } = this;
+    const debug = (str) => {
+      addGlobalLog(str)
+      console.log(str); // eslint-disable-line no-console
+    };
     const inputHex = apdu.toString("hex");
     if (debug) {
       debug("=> " + inputHex);

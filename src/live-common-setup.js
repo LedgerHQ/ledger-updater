@@ -10,7 +10,7 @@ listenLogs(log => {
 });
 
 setNetwork((...args) => {
-  console.log(">> network:", args)
+  console.log(">> network:", args);
   return axios(...args);
 });
 

@@ -8,6 +8,7 @@ import remapError from "../logic/remapError";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
 import DisplayError from "./DisplayError";
+import { addGlobalLog } from "../renderer/logs";
 
 const DeviceContext = createContext(null);
 
@@ -35,6 +36,8 @@ export default function ConnectDevice({ children }) {
       if (infos.version === "2.2-d3") {
         infos.version = "2.2-d3-eel";
       }
+
+      addGlobalLog(`Device connected: ${JSON.stringify(infos)}`);
 
       // force provider id vault
       Object.assign(infos, { providerId: 5 });
