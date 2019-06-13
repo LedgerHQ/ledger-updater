@@ -49,8 +49,16 @@ export default ({ onBack }) => {
           throw new Error("No firmware found.");
         }
 
+        // Object.assign(latestFirmware.osu, {
+        //   firmware: "blue/2.2-d3-eel/fw_2.2-d1-eel/upgrade_osu_2.2_d3_eel",
+        // });
+
+        // Object.assign(latestFirmware.osu, {
+        //   firmware: "blue/2.2-d4-eel/fw_2.2-d3-eel/upgrade_osu_2.2_d4_eel",
+        // });
+
         Object.assign(latestFirmware.osu, {
-          firmware: "blue/2.2-d3-eel/fw_2.2-d1-eel/upgrade_osu_2.2_d3_eel",
+          firmware: "blue/2.2-d4-eel/fw_2.2-d4-eel/upgrade_osu_2.2_d4_eel",
         });
 
         addLog("Firmware found :)");
