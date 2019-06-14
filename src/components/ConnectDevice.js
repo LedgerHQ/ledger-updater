@@ -9,6 +9,7 @@ import HidProxy from "../HidProxy";
 import Button from "./Button";
 import useIsUnmounted from "../hooks/useIsUnmounted";
 import DisplayError from "./DisplayError";
+import ProgressBar from "./ProgressBar";
 import { addGlobalLog } from "../renderer/logs";
 
 const DeviceContext = createContext(null);

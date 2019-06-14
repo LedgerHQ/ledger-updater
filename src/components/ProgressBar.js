@@ -9,8 +9,10 @@ export default ({ progress, indeterminate }) => (
       <div
         className="bar"
         style={{
-          transform: `scaleX(${indeterminate ? 1 : progress})`,
+          transform: `scaleX(${indeterminate ? 1 : progress || 0})`,
           backgroundColor: indeterminate ? colors.bg : undefined,
+          transition:
+            !indeterminate && progress > 0 ? "50ms linear transform" : "none",
         }}
       />
       <div className="percent">
@@ -43,23 +45,25 @@ export default ({ progress, indeterminate }) => (
           justify-content: center;
         }
         .percent {
+          font-size: 13px;
           position: relative;
           color: white;
           font-weight: bold;
           background: rgba(0, 0, 0, 0.3);
-          padding: 5px 10px;
+          padding: 0 10px;
           border-radius: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
         }
         .spinner {
+          font-size: 16px;
           display: flex;
+          padding: 5px 0;
           animation: 750ms linear rotating infinite;
         }
         .bar {
-          background: ${opacity(colors.ocean, 0.4)};
-          transition: 50ms linear transform;
+          background: ${opacity(colors.ocean, 0.6)};
           transform-origin: center left;
           position: absolute;
           top: 0;
