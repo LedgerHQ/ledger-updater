@@ -7,6 +7,7 @@ import colors from "../colors";
 import remapError from "../logic/remapError";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
+import useIsUnmounted from "../hooks/useIsUnmounted";
 import DisplayError from "./DisplayError";
 import { addGlobalLog } from "../renderer/logs";
 
@@ -25,11 +26,14 @@ export default function ConnectDevice({ children }) {
   const [value, setValue] = useState(null);
   const [transport, setTransport] = useState(null);
   const [error, setError] = useState(null);
+  const isUnmounted = useIsUnmounted();
 
   const connect = async () => {
     try {
       const t = await HidProxy.open();
+      if (isUnmounted.current) return;
       const infos = await getDeviceInfo(t);
+      if (isUnmounted.current) return;
 
       // FIXME * hack * hack * hack *
       // even in OSU mode, the version should containe -eel
@@ -53,6 +57,7 @@ export default function ConnectDevice({ children }) {
   const disconnect = async () => {
     if (transport) {
       await transport.close();
+      if (isUnmounted.current) return;
       setValue(null);
       setTransport(null);
     }
