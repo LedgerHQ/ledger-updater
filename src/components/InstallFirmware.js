@@ -1,42 +1,62 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import manager from "@ledgerhq/live-common/lib/manager";
-import moment from "moment";
 import firmwareUpdatePrepare from "@ledgerhq/live-common/lib/hw/firmwareUpdate-prepare";
 import firmwareUpdateMain from "@ledgerhq/live-common/lib/hw/firmwareUpdate-main";
 
 import { useDeviceInfos } from "./ConnectDevice";
-import Button from "./Button";
+import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
+import Logs from "./Logs";
 import remapError from "../logic/remapError";
 
 let logId = 0;
 
-export default ({ onBack }) => {
+const INITIAL_STATE = {
+  logs: [],
+  error: null,
+  step: "start",
+  progress: 0,
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case "ADD_LOG":
+      const log = { id: logId++, date: new Date(), text: payload };
+      return { ...state, logs: [...state.logs, log] };
+    case "SET_ERROR":
+      return { ...state, error: payload };
+    case "SET_STEP":
+      return { ...state, step: payload };
+    case "SET_PROGRESS":
+      return { ...state, progress: payload };
+    default:
+      return state;
+  }
+};
+
+export default () => {
   const infos = useDeviceInfos();
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { logs, error, step, progress } = state;
 
-  const [logs, dispatch] = useReducer((logs, action) => {
-    switch (action.type) {
-      case "ADD":
-        return [
-          ...logs,
-          { id: logId++, date: new Date(), text: action.payload },
-        ];
-      default:
-        return logs;
-    }
-  }, []);
-
-  const [error, setErrorRaw] = useState(null);
-  const [finished, setFinished] = useState(false);
+  const addLog = msg => dispatch({ type: "ADD_LOG", payload: msg });
+  const setStep = step => dispatch({ type: "SET_STEP", payload: step });
+  const setProgress = progress =>
+    dispatch({ type: "SET_PROGRESS", payload: progress });
 
   const setError = err => {
     const remappedError = remapError(err);
-    setErrorRaw(remappedError);
+    dispatch({ type: "SET_ERROR", payload: remappedError });
     addLog("An error occured. Stopping.");
   };
 
-  const addLog = msg => dispatch({ type: "ADD", payload: msg });
+  const subscribeProgress = stepName => e => {
+    if (e.progress === 0) {
+      setStep(stepName);
+    }
+    setProgress(e.progress);
+  };
 
   useEffect(() => {
     let sub;
@@ -52,12 +72,19 @@ export default ({ onBack }) => {
         addLog("Firmware found :)");
         console.log(latestFirmware);
 
+        // Object.assign(latestFirmware.final, {
+        //   firmware: "blue/2.2-d5-eel/fw_2.2-d5-eel/upgrade_2.2_d5_eel",
+        //   firmware_key: "blue/2.2-d5-eel/fw_2.2-d5-eel/upgrade_2.2_d5_eel_key"
+        // });
+
         addLog("Preparing firmware update...");
 
         const installOSU = () => {
+          addLog("Installing OS updater...");
+          setStep("osu");
           sub = firmwareUpdatePrepare("", latestFirmware).subscribe({
-            next: a => console.log(`next`, a),
-            complete: async () => {
+            next: subscribeProgress("osu-progress"),
+            complete: () => {
               addLog("Waiting for device to reboot...");
               installMain();
             },
@@ -66,13 +93,13 @@ export default ({ onBack }) => {
         };
 
         const installMain = async () => {
-          addLog("Update main part...");
+          addLog("Installing firmware...");
+          setStep("firmware");
           sub = firmwareUpdateMain("", latestFirmware).subscribe({
-            next: a => console.log(`next`, a),
+            next: subscribeProgress("firmware-progress"),
             error: setError,
             complete: () => {
               addLog("Install finished");
-              setFinished(true);
             },
           });
         };
@@ -99,33 +126,14 @@ export default ({ onBack }) => {
 
   return (
     <Spaced of={20}>
-      <div className="logs">
-        {logs.map(log => (
-          <div key={log.id}>
-            <span style={{ color: "#0ce4bf", userSelect: "none" }}>
-              {`${moment(log.date).format("HH:mm:ss")} `}
-            </span>
-            {log.text}
-          </div>
-        ))}
-      </div>
-      {error && <DisplayError error={error} />}
-      {(error || finished) && <Button onClick={onBack}>Go back</Button>}
-      <style jsx>
-        {`
-          .logs {
-            min-height: 50px;
-            font-family: monospace;
-            font-size: 13px;
-            line-height: 16px;
-            background-color: #444;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            overflow: auto;
-          }
-        `}
-      </style>
+      <Logs logs={logs} />
+      {error ? (
+        <DisplayError error={error} />
+      ) : step === "osu" || step === "firmware" ? (
+        <ProgressBar indeterminate />
+      ) : step === "osu-progress" || step === "firmware-progress" ? (
+        <ProgressBar progress={progress} />
+      ) : null}
     </Spaced>
   );
 };

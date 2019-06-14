@@ -34,16 +34,14 @@ export default function DeviceManager() {
 }
 
 const Actions = ({ onInstallFirmware, onInstallApp }) => (
-  <>
-    <div className="actions">
-      <div tabIndex={0} className="action" onClick={onInstallFirmware}>
-        <GoFileBinary size={40} />
-        <span>Install firmware</span>
-      </div>
-      <div tabIndex={0} className="action" onClick={onInstallApp}>
-        <GoVersions size={40} />
-        <span>Install Vault app</span>
-      </div>
+  <div className="actions">
+    <div tabIndex={0} className="action" onClick={onInstallFirmware}>
+      <GoFileBinary size={40} />
+      <span>Install firmware</span>
+    </div>
+    <div tabIndex={0} className="action" onClick={onInstallApp}>
+      <GoVersions size={40} />
+      <span>Install Vault app</span>
     </div>
     <style jsx>
       {`
@@ -85,5 +83,5 @@ const Actions = ({ onInstallFirmware, onInstallApp }) => (
         }
       `}
     </style>
-  </>
+  </div>
 );
