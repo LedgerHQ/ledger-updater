@@ -1,7 +1,7 @@
 {
   "name": "ledger-updater",
   "description": "Standalone app manager / firmware updater tool",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "license": "MIT",
   "author": "LedgerHQ",
   "repository": {
