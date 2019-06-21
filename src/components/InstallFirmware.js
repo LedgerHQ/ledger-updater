@@ -69,7 +69,7 @@ export default () => {
           throw new Error("No firmware found.");
         }
 
-        addLog("Firmware found :)");
+        addLog("Firmware found");
         console.log(latestFirmware);
 
         // Object.assign(latestFirmware.final, {

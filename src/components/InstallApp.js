@@ -4,6 +4,7 @@ import uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
 import { useDeviceInfos } from "./ConnectDevice";
 import Button from "./Button";
+import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
 import HidProxy from "../HidProxy";
@@ -27,6 +28,7 @@ const appToUnInstall = {
 export default ({ onBack }) => {
   const infos = useDeviceInfos();
   const [msg, setMsg] = useState("uninstalling current app...");
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
   const [completed, setCompleted] = useState(false);
 
@@ -40,9 +42,8 @@ export default ({ onBack }) => {
           setMsg("installing latest app...");
           installApp(transport, infos.targetId, appToInstall).subscribe({
             next: evt => {
-              setMsg(
-                `installing latest app... ${Math.round(evt.progress * 100)}%`,
-              );
+              setMsg(`installing latest app...`);
+              setProgress(evt.progress);
             },
             complete: () => setCompleted(true),
             error: handleError,
@@ -79,5 +80,14 @@ export default ({ onBack }) => {
     );
   }
 
-  return msg;
+  return (
+    <Spaced of={20}>
+      <div>{msg}</div>
+      {progress ? (
+        <ProgressBar progress={progress} />
+      ) : (
+        <ProgressBar indeterminate />
+      )}
+    </Spaced>
+  );
 };
