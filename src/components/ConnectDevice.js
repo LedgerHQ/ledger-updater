@@ -44,8 +44,6 @@ export default function ConnectDevice({ children }) {
 
       addGlobalLog(`Device connected: ${JSON.stringify(infos)}`);
 
-      // force provider id vault
-      Object.assign(infos, { providerId: 5 });
       setError(null);
       setValue(infos);
       setTransport(t);
