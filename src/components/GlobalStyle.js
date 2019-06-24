@@ -7,6 +7,7 @@ export default () => (
     {`
       * {
         box-sizing: border-box;
+        color: inherit;
         margin: 0;
       }
 
@@ -22,11 +23,10 @@ export default () => (
         color: ${colors.text};
         font-size: 16px;
         line-height: 24px;
-        padding: 40px;
+        margin: 80px 40px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         overflow-x: hidden;
       }
 

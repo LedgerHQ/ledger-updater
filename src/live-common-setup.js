@@ -6,7 +6,7 @@ import { registerTransportModule } from "@ledgerhq/live-common/lib/hw";
 
 import HidProxy from "./HidProxy";
 
-setEnv("FORCE_PROVIDER", 4);
+setEnv("FORCE_PROVIDER", 5);
 
 listenLogs(log => {
   console.log(...log);

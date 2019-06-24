@@ -7,9 +7,12 @@ import colors from "../colors";
 import remapError from "../logic/remapError";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
+import Collapse from "./Collapse";
 import useIsUnmounted from "../hooks/useIsUnmounted";
 import DisplayError from "./DisplayError";
-import ProgressBar from "./ProgressBar";
+import SetManagerProvider from "./SetManagerProvider";
+import { SetAppSettings } from "./AppSettingsContext";
+import { useManagerProvider } from "./ManagerProviderContext";
 import { addGlobalLog } from "../renderer/logs";
 
 const DeviceContext = createContext(null);
@@ -24,6 +27,7 @@ export const useDeviceInfos = () => {
 };
 
 export default function ConnectDevice({ children }) {
+  const provider = useManagerProvider();
   const [value, setValue] = useState(null);
   const [transport, setTransport] = useState(null);
   const [error, setError] = useState(null);
@@ -85,12 +89,18 @@ export default function ConnectDevice({ children }) {
   return (
     <DeviceContext.Provider value={value}>
       <div className="header">
-        <div style={{ fontSize: 11 }}>{`firmware v${value.version}`}</div>
+        <div style={{ fontSize: 11 }}>
+          {`firmware v${value.version} - provider ${provider}`}
+        </div>
         <Button Icon={FaStopCircle} onClick={disconnect}>
           Disconnect
         </Button>
       </div>
       <div className="container">{children}</div>
+      <Collapse title="Advanced settings">
+        <SetManagerProvider />
+        <SetAppSettings />
+      </Collapse>
       <style jsx>
         {`
           .container {

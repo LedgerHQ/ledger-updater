@@ -6,27 +6,14 @@ import { useDeviceInfos } from "./ConnectDevice";
 import Button from "./Button";
 import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
+import { useAppSettings } from "./AppSettingsContext";
 import Spaced from "./Spaced";
 import HidProxy from "../HidProxy";
 import remapError from "../logic/remapError";
 
-const appToInstall = {
-  targetId: 0x31010004,
-  perso: "perso_11",
-  delete_key: "blue/2.1.1-ee/vault3/app_del_key",
-  firmware: "blue/2.1.1-ee/vault3/app_latest",
-  firmware_key: "blue/2.1.1-ee/vault3/app_latest_key",
-};
-
-const appToUnInstall = {
-  targetId: 0x31010004,
-  perso: "perso_11",
-  delete: "blue/2.1.1-ee/vault3/app_del",
-  delete_key: "blue/2.1.1-ee/vault3/app_del_key",
-};
-
 export default ({ onBack }) => {
   const infos = useDeviceInfos();
+  const appSettings = useAppSettings();
   const [msg, setMsg] = useState("uninstalling current app...");
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
@@ -37,10 +24,10 @@ export default ({ onBack }) => {
     async function effect() {
       const transport = await HidProxy.open();
       const handleError = err => setError(remapError(err));
-      sub = uninstallApp(transport, infos.targetId, appToUnInstall).subscribe({
+      sub = uninstallApp(transport, infos.targetId, appSettings.uninstall).subscribe({
         complete: () => {
           setMsg("installing latest app...");
-          installApp(transport, infos.targetId, appToInstall).subscribe({
+          installApp(transport, infos.targetId, appSettings.install).subscribe({
             next: evt => {
               setMsg(`installing latest app...`);
               setProgress(evt.progress);
