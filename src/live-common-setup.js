@@ -1,12 +1,9 @@
 import axios from "axios";
 import { listen as listenLogs } from "@ledgerhq/logs";
-import { setEnv } from "@ledgerhq/live-common/lib/env";
 import { setNetwork } from "@ledgerhq/live-common/lib/network";
 import { registerTransportModule } from "@ledgerhq/live-common/lib/hw";
 
 import HidProxy from "./HidProxy";
-
-setEnv("FORCE_PROVIDER", 5);
 
 listenLogs(log => {
   console.log(...log);

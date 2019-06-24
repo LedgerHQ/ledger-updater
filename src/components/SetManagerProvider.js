@@ -9,7 +9,13 @@ export default () => {
   const provider = useManagerProvider();
   const setProvider = useSetManagerProvider();
 
-  const handleChange = e => setProvider(e.target.value);
+  const handleChange = e => {
+    let v = Number(e.target.value);
+    if (isNaN(v)) {
+      v = 0;
+    }
+    setProvider(v);
+  };
   return (
     <div>
       <span>provider:</span>

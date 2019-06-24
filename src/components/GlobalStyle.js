@@ -23,7 +23,7 @@ export default () => (
         color: ${colors.text};
         font-size: 16px;
         line-height: 24px;
-        margin: 80px 40px;
+        padding: 80px 40px;
         display: flex;
         flex-direction: column;
         align-items: center;

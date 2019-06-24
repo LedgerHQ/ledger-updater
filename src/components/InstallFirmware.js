@@ -2,8 +2,9 @@ import React, { useEffect, useReducer } from "react";
 import manager from "@ledgerhq/live-common/lib/manager";
 import firmwareUpdatePrepare from "@ledgerhq/live-common/lib/hw/firmwareUpdate-prepare";
 import firmwareUpdateMain from "@ledgerhq/live-common/lib/hw/firmwareUpdate-main";
+import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 
-import { useDeviceInfos } from "./ConnectDevice";
+import HidProxy from "../HidProxy";
 import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
 import Spaced from "./Spaced";
@@ -36,7 +37,6 @@ const reducer = (state, { type, payload }) => {
 };
 
 export default () => {
-  const infos = useDeviceInfos();
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const { logs, error, step, progress } = state;
 
@@ -46,6 +46,7 @@ export default () => {
     dispatch({ type: "SET_PROGRESS", payload: progress });
 
   const setError = err => {
+    console.error(err)
     const remappedError = remapError(err);
     dispatch({ type: "SET_ERROR", payload: remappedError });
     addLog("An error occured. Stopping.");
@@ -61,8 +62,9 @@ export default () => {
   useEffect(() => {
     let sub;
     const effect = async () => {
-      console.log(infos);
       try {
+        const t = await HidProxy.open();
+        const infos = await getDeviceInfo(t);
         addLog("Searching for latest firmware...");
         const latestFirmware = await manager.getLatestFirmwareForDevice(infos);
         if (!latestFirmware) {
@@ -71,11 +73,6 @@ export default () => {
 
         addLog("Firmware found");
         console.log(latestFirmware);
-
-        // Object.assign(latestFirmware.final, {
-        //   firmware: "blue/2.2-d5-eel/fw_2.2-d5-eel/upgrade_2.2_d5_eel",
-        //   firmware_key: "blue/2.2-d5-eel/fw_2.2-d5-eel/upgrade_2.2_d5_eel_key"
-        // });
 
         addLog("Preparing firmware update...");
 
