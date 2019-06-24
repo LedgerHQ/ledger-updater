@@ -17,13 +17,6 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
-  "build": {
-    "appId": "com.ledgerhq.updater",
-    "productName": "Ledger Updater",
-    "linux": {
-      "target": "AppImage"
-    }
-  },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@ledgerhq/errors": "^4.61.0",
