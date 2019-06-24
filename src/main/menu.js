@@ -10,6 +10,12 @@ export default win => {
       label: "Help",
       submenu: [
         {
+          label: "Help center",
+          click() {
+            win.webContents.send("helpCenter");
+          },
+        },
+        {
           label: "Export logs",
           click() {
             win.webContents.send("exportLogs");
