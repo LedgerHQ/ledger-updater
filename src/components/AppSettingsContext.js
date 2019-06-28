@@ -17,6 +17,8 @@ const INITIAL_VALUE = {
     perso: "perso_11",
     delete: "blue/2.1.1-ee/vault3/app_del",
     delete_key: "blue/2.1.1-ee/vault3/app_del_key",
+    // delete: "blue/2.2.1-ee/vault/app_del",
+    // delete_key: "blue/2.2.1-ee/vault/app_del",
   },
 };
 
