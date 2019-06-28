@@ -17,7 +17,7 @@ function createMainWindow() {
   const window = new BrowserWindow({
     backgroundColor: colors.bg,
     width: 700,
-    height: 350,
+    height: 500,
   });
 
   if (isDevelopment) {
