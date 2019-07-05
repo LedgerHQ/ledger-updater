@@ -9,8 +9,8 @@ const INITIAL_VALUE = {
     targetId: 0x31010004,
     perso: "perso_11",
     delete_key: "blue/2.2.2-ee/vault/app_del_key",
-    firmware: "blue/2.2.2-ee/vault/app_1.0.1_2.2-debug",
-    firmware_key: "blue/2.2.2-ee/vault/app_1.0.1_2.2-debug_key",
+    firmware: "blue/2.2.3-ee/vault/app_1.0.2_2.2-debug",
+    firmware_key: "blue/2.2.3-ee/vault/app_1.0.2_2.2-debug_key",
   },
   uninstall: {
     targetId: 0x31010004,
