@@ -4,7 +4,7 @@ import colors, { opacity } from "../colors";
 
 export default ({ error, ...props }) => (
   <div {...props}>
-    {error.toString()}
+    {error.message}
     <style jsx>
       {`
         div {

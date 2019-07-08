@@ -12,7 +12,7 @@ const handleCmd = async (cmd, ...args) => {
     case "open":
       if (transport) {
         console.warn("transport was already opened"); // eslint-disable-line no-console
-        return transport
+        return transport;
       }
       transport = await TransportNodeHid.open("");
       transport.on("disconnect", () => {

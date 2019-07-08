@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { GoFileBinary, GoVersions } from "react-icons/go";
+import { IoMdFastforward } from "react-icons/io";
 
 import InstallApp from "./InstallApp";
 import InstallFirmware from "./InstallFirmware";
+import InstallAll from "./InstallAll";
 import Spaced from "./Spaced";
 import colors, { darken } from "../colors";
 
@@ -13,8 +15,9 @@ export default function DeviceManager() {
 
   if (!action) {
     return (
-      <Spaced of={20}>
+      <Spaced of={10}>
         <Actions
+          onInstallAll={() => setAction("install-all")}
           onInstallFirmware={() => setAction("install-firmware")}
           onInstallApp={() => setAction("install-app")}
         />
@@ -30,18 +33,30 @@ export default function DeviceManager() {
     return <InstallFirmware onBack={onBack} />;
   }
 
+  if (action === "install-all") {
+    return <InstallAll onBack={onBack} />;
+  }
+
   throw new Error("no defined action");
 }
 
-const Actions = ({ onInstallFirmware, onInstallApp }) => (
-  <div className="actions">
-    <div tabIndex={0} className="action" onClick={onInstallFirmware}>
-      <GoFileBinary size={40} />
-      <span>Install firmware</span>
+const Actions = ({ onInstallFirmware, onInstallApp, onInstallAll }) => (
+  <>
+    <div className="actions">
+      <div tabIndex={0} className="action" onClick={onInstallAll}>
+        <IoMdFastforward size={40} />
+        <span>Install firmware + Vault app</span>
+      </div>
     </div>
-    <div tabIndex={0} className="action" onClick={onInstallApp}>
-      <GoVersions size={40} />
-      <span>Install Vault app</span>
+    <div className="actions">
+      <div tabIndex={0} className="action" onClick={onInstallFirmware}>
+        <GoFileBinary size={40} />
+        <span>Install firmware</span>
+      </div>
+      <div tabIndex={0} className="action" onClick={onInstallApp}>
+        <GoVersions size={40} />
+        <span>Install Vault app</span>
+      </div>
     </div>
     <style jsx>
       {`
@@ -83,5 +98,5 @@ const Actions = ({ onInstallFirmware, onInstallApp }) => (
         }
       `}
     </style>
-  </div>
+  </>
 );

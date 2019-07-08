@@ -1,13 +1,12 @@
 import React, { useEffect, useReducer } from "react";
 
-import { installApp } from "../logic/hw";
-import Button from "./Button";
-import remapError from "../logic/remapError";
-import Logs from "./Logs";
+import { useAppSettings } from "./AppSettingsContext";
 import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
-import { useAppSettings } from "./AppSettingsContext";
 import Spaced from "./Spaced";
+import Logs from "./Logs";
+import remapError from "../logic/remapError";
+import { installEverything } from "../logic/hw";
 
 let logId = 0;
 
@@ -34,18 +33,23 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-export default ({ onBack }) => {
-  const appSettings = useAppSettings();
+export default () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const appSettings = useAppSettings();
+  const { logs, error, step, progress } = state;
+
   const addLog = msg => dispatch({ type: "ADD_LOG", payload: msg });
   const setStep = step => dispatch({ type: "SET_STEP", payload: step });
   const setProgress = progress =>
     dispatch({ type: "SET_PROGRESS", payload: progress });
+
   const setError = err => {
+    console.error(err);
     const remappedError = remapError(err);
     dispatch({ type: "SET_ERROR", payload: remappedError });
     addLog("An error occured. Stopping.");
   };
+
   const subscribeProgress = stepName => e => {
     if (e.progress === 0) {
       setStep(stepName);
@@ -53,14 +57,12 @@ export default ({ onBack }) => {
     setProgress(e.progress);
   };
 
-  const { logs, error, step, progress } = state;
-
   useEffect(() => {
-    const sub = installApp({
-      appSettings,
+    const sub = installEverything({
       addLog,
       setStep,
       subscribeProgress,
+      appSettings,
     }).subscribe({
       complete: () => setStep("finished"),
       error: setError,
@@ -70,21 +72,23 @@ export default ({ onBack }) => {
     };
   }, []);
 
-  const Back = () => <Button onClick={onBack}>Go back</Button>;
-
   return (
     <Spaced of={20}>
       <Logs logs={logs} />
       {error ? (
         <DisplayError error={error} />
-      ) : step === "install-app" || step === "uninstall-app" ? (
+      ) : step === "osu" ||
+        step === "firmware" ||
+        step === "install-app" ||
+        step === "uninstall-app" ? (
         <ProgressBar indeterminate />
-      ) : step === "install-app-progress" ? (
+      ) : step === "osu-progress" ||
+        step === "firmware-progress" ||
+        step === "install-app-progress" ? (
         <ProgressBar progress={progress} />
       ) : step === "finished" ? (
         <Spaced of={10}>
           <div>Install successful. You can safely close the updater.</div>
-          <Back />
         </Spaced>
       ) : null}
     </Spaced>
