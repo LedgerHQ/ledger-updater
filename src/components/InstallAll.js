@@ -88,7 +88,7 @@ export default () => {
         <ProgressBar progress={progress} />
       ) : step === "finished" ? (
         <Spaced of={10}>
-          <div>Install successful. You can safely close the updater.</div>
+          <div>Install successful. You can safely close the window.</div>
         </Spaced>
       ) : null}
     </Spaced>

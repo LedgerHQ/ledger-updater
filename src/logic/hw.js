@@ -82,7 +82,7 @@ export function installApp({
             live_uninstallApp(transport, infos.targetId, appSettings.uninstall),
             of(null).pipe(
               tap(() => {
-                addLog("Finished uninstalling");
+                addLog("Uninstalling complete");
                 addLog("Installing latest Vault app... please wait...");
               }),
             ),
@@ -93,7 +93,7 @@ export function installApp({
             ).pipe(tap(subscribeProgress("install-app-progress"))),
             of(null).pipe(
               tap(() => {
-                addLog("Finished installing");
+                addLog("Installing complete");
               }),
             ),
           ),

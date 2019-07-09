@@ -9,8 +9,8 @@ const INITIAL_VALUE = {
     targetId: 0x31010004,
     perso: "perso_11",
     delete_key: "blue/2.2.2-ee/vault/app_del_key",
-    firmware: "blue/2.2.3-ee/vault/app_1.0.2_2.2-debug",
-    firmware_key: "blue/2.2.3-ee/vault/app_1.0.2_2.2-debug_key",
+    firmware: "blue/2.2.3-ee/vault/app_2.0.0",
+    firmware_key: "blue/2.2.3-ee/vault/app_2.0.0_key",
   },
   uninstall: {
     targetId: 0x31010004,
@@ -43,13 +43,13 @@ export const SetAppSettings = () => {
   return (
     <div className="container">
       <h3>App settings</h3>
-      <div>uninstall:</div>
+      <div>Uninstall:</div>
       <JSONTextarea
         rows={6}
         value={appSettings.uninstall}
         onChange={v => setAppSettings({ ...appSettings, uninstall: v })}
       />
-      <div>install:</div>
+      <div>Install:</div>
       <JSONTextarea
         rows={7}
         value={appSettings.install}

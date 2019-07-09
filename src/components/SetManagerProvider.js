@@ -18,7 +18,7 @@ export default () => {
   };
   return (
     <div>
-      <span>provider:</span>
+      <span>Provider:</span>
       <input type="text" value={provider} onChange={handleChange} />
       <style jsx>
         {`

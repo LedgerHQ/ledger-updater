@@ -7,6 +7,7 @@ import colors from "../colors";
 import remapError from "../logic/remapError";
 import HidProxy from "../HidProxy";
 import Button from "./Button";
+import Spaced from "./Spaced";
 import Collapse from "./Collapse";
 import useIsUnmounted from "../hooks/useIsUnmounted";
 import DisplayError from "./DisplayError";
@@ -68,21 +69,37 @@ export default function ConnectDevice({ children }) {
 
   if (!value) {
     return (
-      <div>
+      <Spaced
+        of={20}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      >
         <Button onClick={connect} Icon={FaUsb}>
-          Connect device
+          Get started
         </Button>
         {error && <DisplayError style={{ marginTop: 20 }} error={error} />}
+        <div className="help">
+          {
+            'Connect the device to your computer, tap your PIN code, then click "Get started".'
+          }
+        </div>
         <style jsx>
           {`
-            div {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
+            .help {
+              font-size: 13px;
             }
           `}
         </style>
-      </div>
+      </Spaced>
     );
   }
 

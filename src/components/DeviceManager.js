@@ -30,7 +30,7 @@ const Actions = ({ onInstallAll }) => (
     <div className="actions">
       <div tabIndex={0} className="action" onClick={onInstallAll}>
         <IoMdFastforward size={40} />
-        <span>Install firmware + Vault app</span>
+        <span>{"Update the Ledger Vault app & firmware"}</span>
       </div>
     </div>
     <style jsx>
