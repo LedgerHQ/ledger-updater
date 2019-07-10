@@ -3,6 +3,7 @@ import React, { useEffect, useReducer } from "react";
 import { useAppSettings } from "./AppSettingsContext";
 import ProgressBar from "./ProgressBar";
 import DisplayError from "./DisplayError";
+import Button from "./Button";
 import Spaced from "./Spaced";
 import Logs from "./Logs";
 import remapError from "../logic/remapError";
@@ -28,6 +29,8 @@ const reducer = (state, { type, payload }) => {
       return { ...state, step: payload };
     case "SET_PROGRESS":
       return { ...state, progress: payload };
+    case "RESET":
+      return INITIAL_STATE;
     default:
       return state;
   }
@@ -57,7 +60,7 @@ export default () => {
     setProgress(e.progress);
   };
 
-  useEffect(() => {
+  const run = () => {
     const sub = installEverything({
       addLog,
       setStep,
@@ -70,13 +73,23 @@ export default () => {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  };
+
+  const retry = () => {
+    dispatch({ type: "RESET" });
+    run();
+  };
+
+  useEffect(run, []);
 
   return (
     <Spaced of={20}>
       <Logs logs={logs} />
       {error ? (
-        <DisplayError error={error} />
+        <>
+          <DisplayError error={error} />
+          <Button onClick={retry}>Retry</Button>
+        </>
       ) : step === "osu" ||
         step === "firmware" ||
         step === "install-app" ||

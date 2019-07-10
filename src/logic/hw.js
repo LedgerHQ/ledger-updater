@@ -25,6 +25,8 @@ export function installFirmware({ addLog, setStep, subscribeProgress }) {
       if (!latestFirmware) {
         return throwError(new Error(ALREADY_UP_TO_DATE));
       }
+      console.log(`INFOS`, infos);
+      console.log(`LATEST FIRMWARE`, latestFirmware);
       return infos.isOSU
         ? concat(
             of(null).pipe(
