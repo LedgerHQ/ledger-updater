@@ -8,6 +8,8 @@ import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 import live_installApp from "@ledgerhq/live-common/lib/hw/installApp";
 import live_uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
+const DEV_MODE = false;
+
 const withDeviceInfo = withDevicePolling("")(
   transport => from(getDeviceInfo(transport)),
   () => true,
@@ -122,7 +124,33 @@ export function installEverything({
         return throwError(err);
       }),
     ),
-    of(delay(2000)),
+    of(delay(2000)).pipe(
+      tap(() => {
+        addLog("Waiting for device to reboot...");
+        addLog("Enter your PIN when asked");
+      }),
+    ),
+    withDeviceInfo,
+    of(null).pipe(
+      tap(() => {
+        addLog("Fetching app...");
+      }),
+    ),
+    withDeviceInfo
+      .pipe(
+        concatMap(deviceInfo =>
+          from(
+            manager.getAppsList(deviceInfo, DEV_MODE, () =>
+              Promise.resolve([]),
+            ),
+          ),
+        ),
+      )
+      .pipe(
+        tap(apps => {
+          console.log(`apps list`, apps);
+        }),
+      ),
     installApp({ appSettings, addLog, setStep, subscribeProgress }),
   );
 }
