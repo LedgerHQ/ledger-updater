@@ -18,19 +18,8 @@ export default () => {
   };
   return (
     <div>
-      <span>Provider:</span>
+      <h3>Provider</h3>
       <input type="text" value={provider} onChange={handleChange} />
-      <style jsx>
-        {`
-          div {
-            display: flex;
-            align-items: center;
-          }
-          div :global(> * + *) {
-            margin-left: 10px;
-          }
-        `}
-      </style>
     </div>
   );
 };

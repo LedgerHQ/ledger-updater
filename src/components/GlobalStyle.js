@@ -51,6 +51,22 @@ export default () => (
       button:active {
         background: ${darken(colors.ocean, 0.1)};
       }
+
+      h3 {
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid ${colors.border};
+        border-radius: 4px;
+      }
+
+      input::placeholder {
+        color: ${colors.placeholder};
+      }
     `}
   </style>
 );

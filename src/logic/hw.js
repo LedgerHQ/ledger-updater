@@ -8,6 +8,22 @@ import getDeviceInfo from "@ledgerhq/live-common/lib/hw/getDeviceInfo";
 import live_installApp from "@ledgerhq/live-common/lib/hw/installApp";
 import live_uninstallApp from "@ledgerhq/live-common/lib/hw/uninstallApp";
 
+const DEV_MODE = false;
+
+const APP_SETTINGS = {
+  install: {
+    targetId: 0x31010004,
+    perso: "perso_11",
+    delete_key: "blue/2.2.2-ee/vault/app_del_key",
+  },
+  uninstall: {
+    targetId: 0x31010004,
+    perso: "perso_11",
+    delete: "blue/2.1.1-ee/vault3/app_del",
+    delete_key: "blue/2.1.1-ee/vault3/app_del_key",
+  },
+};
+
 const withDeviceInfo = withDevicePolling("")(
   transport => from(getDeviceInfo(transport)),
   () => true,
@@ -64,12 +80,7 @@ export function installFirmware({ addLog, setStep, subscribeProgress }) {
   return installSub;
 }
 
-export function installApp({
-  appSettings,
-  addLog,
-  setStep,
-  subscribeProgress,
-}) {
+export function installApp({ app, addLog, setStep, subscribeProgress }) {
   return withDevicePolling("")(
     transport => {
       return from(getDeviceInfo(transport)).pipe(
@@ -81,18 +92,20 @@ export function installApp({
                 addLog("Uninstalling current app...");
               }),
             ),
-            live_uninstallApp(transport, infos.targetId, appSettings.uninstall),
+            live_uninstallApp(
+              transport,
+              infos.targetId,
+              APP_SETTINGS.uninstall,
+            ),
             of(null).pipe(
               tap(() => {
                 addLog("Uninstalling complete");
                 addLog("Installing latest Vault app... please wait...");
               }),
             ),
-            live_installApp(
-              transport,
-              infos.targetId,
-              appSettings.install,
-            ).pipe(tap(subscribeProgress("install-app-progress"))),
+            live_installApp(transport, infos.targetId, app).pipe(
+              tap(subscribeProgress("install-app-progress")),
+            ),
             of(null).pipe(
               tap(() => {
                 addLog("Installing complete");
@@ -122,7 +135,36 @@ export function installEverything({
         return throwError(err);
       }),
     ),
-    of(delay(2000)),
-    installApp({ appSettings, addLog, setStep, subscribeProgress }),
+    of(delay(2000)).pipe(
+      tap(() => {
+        addLog("Waiting for device to reboot...");
+        addLog("Enter your PIN when asked");
+      }),
+    ),
+    withDeviceInfo,
+    (appSettings.firmware
+      ? of({
+          ...APP_SETTINGS.install,
+          firmware: appSettings.firmware,
+          firmware_key: `${appSettings.firmware}_key`,
+        })
+      : withDeviceInfo.pipe(
+          tap(() => {
+            addLog("Fetching app...");
+          }),
+          concatMap(deviceInfo =>
+            from(
+              manager
+                .getAppsList(deviceInfo, DEV_MODE, () => Promise.resolve([]))
+                .then(results => results[0]),
+            ),
+          ),
+        )
+    ).pipe(
+      tap(app => {
+        addLog(`Version ${app.firmware} will be installed`);
+      }),
+      concatMap(app => installApp({ app, addLog, setStep, subscribeProgress })),
+    ),
   );
 }
