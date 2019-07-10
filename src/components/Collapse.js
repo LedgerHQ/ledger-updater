@@ -35,7 +35,7 @@ export default function Collapse({ children, title }) {
             border: 1px solid ${colors.border};
             border-radius: 4px;
           }
-          .zone :global(> * + * ) {
+          .zone :global(> * + *) {
             margin-top: 20px;
           }
         `}

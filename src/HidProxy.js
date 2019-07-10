@@ -51,8 +51,8 @@ class HIDProxy extends Transport {
   }
 
   async exchange(apdu) {
-    const debug = (str) => {
-      addGlobalLog(str)
+    const debug = str => {
+      addGlobalLog(str);
       console.log(str); // eslint-disable-line no-console
     };
     const inputHex = apdu.toString("hex");

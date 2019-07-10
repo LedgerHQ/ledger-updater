@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-} from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { setEnv } from "@ledgerhq/live-common/lib/env";
 
 const INITIAL_VALUE = 4;
