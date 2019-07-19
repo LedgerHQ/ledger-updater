@@ -156,7 +156,12 @@ export function installEverything({
             from(
               manager
                 .getAppsList(deviceInfo, DEV_MODE, () => Promise.resolve([]))
-                .then(results => results[0]),
+                .then(results => {
+                  if (!results || !results.length) {
+                    throw new Error("No apps found.");
+                  }
+                  return results[0];
+                }),
             ),
           ),
         )

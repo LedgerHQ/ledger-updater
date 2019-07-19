@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { setEnv } from "@ledgerhq/live-common/lib/env";
 
-const INITIAL_VALUE = 4;
+const INITIAL_VALUE = 5;
 const ManagerContext = createContext(INITIAL_VALUE);
 const SetManagerContext = createContext(null);
 
