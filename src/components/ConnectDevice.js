@@ -27,6 +27,29 @@ export const useDeviceInfos = () => {
   return deviceContext;
 };
 
+const delay = ms => new Promise(f => setTimeout(f, ms));
+
+const defaults = { interval: 500, maxRetry: 3 };
+function retry(f, options) {
+  const { maxRetry, interval } = {
+    ...defaults,
+    ...options,
+  };
+
+  return rec(maxRetry, interval);
+
+  function rec(remainingTry, interval) {
+    const result = f();
+    if (remainingTry <= 0) {
+      return result;
+    }
+    return result.catch(e => {
+      console.warn("retry failed", e.message);
+      return delay(interval).then(() => rec(remainingTry - 1));
+    });
+  }
+}
+
 export default function ConnectDevice({ children }) {
   const provider = useManagerProvider();
   const [value, setValue] = useState(null);
@@ -36,7 +59,7 @@ export default function ConnectDevice({ children }) {
 
   const connect = async () => {
     try {
-      const t = await HidProxy.open();
+      const t = await retry(HidProxy.open, { maxRetry: 5 });
       if (isUnmounted.current) return;
       const infos = await getDeviceInfo(t);
       if (isUnmounted.current) return;
