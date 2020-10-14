@@ -1,3 +1,6 @@
+# !!! DEPRECATED TOOL !!!
+
+
 # ledger-updater
 
 Standalone firmware update / app installation tool.
